@@ -1,10 +1,16 @@
 'use strict';
 
 let wordList = [
-    // 'patio',
-    // 'darts',
-    // 'piano',
-    'horse'
+    'patio',
+    'darts',
+    'piano',
+    'horse',
+    'hello',
+    'water',
+    'pizza',
+    'cuber',
+    'sushi',
+    'crabs'
 ];
 
 let randomIndex = Math.floor(Math.random() * wordList.length),
@@ -17,6 +23,41 @@ let grid = document.getElementById('grid');
     
 buildGrid();
 updateGrid();
+
+window.addEventListener('keydown', handleKeyDown);
+
+function handleKeyDown(e)
+{
+    let letter = e.key.toLowerCase();
+
+    if (letter === 'enter') {
+        
+        if (currentAttempt.length < 5) {
+            return
+        }
+
+        if (!wordList.includes(currentAttempt)) {
+            alert('Não está em minha lista de palavras!');
+
+            return
+        }
+
+        history.push(currentAttempt);
+        currentAttempt = '';
+
+    } else if (letter === 'backspace') {
+        
+        currentAttempt = currentAttempt.slice(0, currentAttempt.length - 1);
+
+    } else if (/[a-z]/.test(letter)) {
+
+        if (currentAttempt.length < 5) {
+            currentAttempt += letter;
+        }
+
+    }
+    updateGrid();
+}
 
 function buildGrid() 
 {
