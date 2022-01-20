@@ -1,6 +1,22 @@
 'use strict';
 
+let wordList = [
+    // 'patio',
+    // 'darts',
+    // 'piano',
+    'horse'
+];
+
+let randomIndex = Math.floor(Math.random() * wordList.length),
+    secret = wordList[randomIndex];
+
+let currentAttempt = '';
+let history = [];
+
 let grid = document.getElementById('grid');
+    
+buildGrid();
+updateGrid();
 
 function buildGrid() 
 {
@@ -18,37 +34,17 @@ function buildGrid()
     }
 }
 
-buildGrid();
-
-let wordList = [
-    // 'patio',
-    // 'darts',
-    // 'piano',
-    'horse'
-];
-
-let randomIndex = Math.floor(Math.random() * wordList.length),
-    secret = wordList[randomIndex];
-
-let attempts = [
-    'rohan',
-    'wowzy'
-],
-    currentAttempt = '';
-
-updateGrid();
-
 function updateGrid()
 {
     let row = grid.firstChild;
-    for (let attempt of attempts) {
-        drawPastAttempt(row, attempt);
+    for (let attempt of history) {
+        drawAttempt(row, attempt, false);
         row = row.nextSibling;
     }
-    drawCurrentAttempt(row, currentAttempt);
+    drawAttempt(row, currentAttempt, true);
 }
 
-function drawPastAttempt(row, attempt)
+function drawAttempt(row, attempt, isCurrent)
 {
     for (let i = 0; i < 5; i++) {
         let cell = row.children[i];
@@ -57,17 +53,14 @@ function drawPastAttempt(row, attempt)
             cell.textContent = attempt[i];
         } else {
             // gambiarra para correção bug nada a ver;
-            cell.innerHTML = '<div style="opacity: 0"></div>';
+            cell.innerHTML = "<div style='opacity: 0'>X</div>";
         }
-        cell.style.backgroundColor = getBgColor(attempt, i);
-    }
-}
 
-function drawCurrentAttempt(row, attempt)
-{
-    for (let i = 0; i < 5; i++) {
-        let cell = row.children[i];
-        cell.textContent = attempt[i] ?? '';
+        if (isCurrent) {
+            cell.style.backgroundColor = '#111';
+        } else {
+            cell.style.backgroundColor = getBgColor(attempt, i);
+        }
     }
 }
 
